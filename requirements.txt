@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+fastmcp
+google-adk
+httpx
+pydantic
+jinja2
+pytest
+pytest-asyncio

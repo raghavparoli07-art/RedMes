@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redmes - Ready Message</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Background Layers -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
+    <div class="scanline"></div>
+
+    <main class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="logo">Redmes</h1>
+            <p class="tagline">WRITE IT RAW. SEND IT RIGHT.</p>
+            <div class="pills-container">
+                <span class="pill pill-1">⚡ Any language</span>
+                <span class="pill pill-2">🎯 Reads the room</span>
+                <span class="pill pill-3">🔒 100% local</span>
+            </div>
+        </header>
+
+        <!-- Input Panel -->
+        <section class="glass-card input-panel" id="inputPanel">
+            <div class="input-group">
+                <label>Platform</label>
+                <div class="custom-select" id="customPlatformSelect">
+                    <div class="select-trigger">
+                        <span class="selected-text">Email</span>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-option selected" data-value="email">Email</div>
+                        <div class="custom-option" data-value="slack">Slack</div>
+                        <div class="custom-option" data-value="text">Text Message</div>
+                    </div>
+                </div>
+                <input type="hidden" id="platformSelect" value="email">
+            </div>
+            
+            <div class="input-group">
+                <label>Recipient Name</label>
+                <input type="text" id="recipientName" placeholder="e.g. Boss, Mom, John">
+            </div>
+
+            <div class="input-group">
+                <label>Raw Draft</label>
+                <div class="textarea-wrapper">
+                    <textarea id="rawMessage" placeholder="Type your unfiltered message here..." maxlength="2000"></textarea>
+                    <span id="charCount" class="char-count">0 / 2000</span>
+                </div>
+            </div>
+
+            <button id="analyzeBtn" class="primary-btn">Analyze & Rewrite</button>
+
+            <!-- Loading Pipeline (Hidden initially) -->
+            <div id="loadingPipeline" class="loading-pipeline hidden">
+                <div class="pipeline-nodes">
+                    <div class="node" id="node-1">Context & Risk</div>
+                    <div class="line"><div class="fill" id="fill-1"></div></div>
+                    <div class="node" id="node-2">Memory</div>
+                    <div class="line"><div class="fill" id="fill-2"></div></div>
+                    <div class="node" id="node-3">Rewriter</div>
+                    <div class="line"><div class="fill" id="fill-3"></div></div>
+                    <div class="node" id="node-4">Formatter</div>
+                </div>
+                <div class="status-text" id="statusText">Starting agents...</div>
+            </div>
+        </section>
+
+        <!-- Error Banner -->
+        <div id="errorBanner" class="glass-card error-banner hidden">
+            <div class="error-content">
+                <span class="error-icon">⚠️</span>
+                <div>
+                    <h3>Could not reach the AI engine</h3>
+                    <p id="errorMsgText">Make sure Ollama is running (`ollama serve`) and try again.</p>
+                </div>
+            </div>
+            <button id="retryBtn" class="secondary-btn">Try Again</button>
+        </div>
+
+        <!-- Results Panel -->
+        <section id="resultsPanel" class="results-panel hidden">
+            
+            <!-- Context Chips Row -->
+            <div class="context-row" id="contextRow">
+                <div class="context-chip relationship-chip" id="chipRelationship">👤 Boss / Senior</div>
+                <div class="context-chip scenario-chip" id="chipScenario">💬 Complaint</div>
+                <div class="context-chip language-chip" id="chipLanguage">🌐 Output: English</div>
+            </div>
+
+            <!-- Risk & Memory Row -->
+            <div class="glass-card flex-row risk-memory-card">
+                <!-- SVG Circular Gauge -->
+                <div class="gauge-container">
+                    <svg viewBox="0 0 120 120" class="risk-gauge">
+                        <circle cx="60" cy="60" r="50" class="gauge-bg" />
+                        <circle cx="60" cy="60" r="50" class="gauge-fill" id="gaugeFill" />
+                    </svg>
+                    <div class="gauge-score" id="riskScoreVal">0</div>
+                    <div class="tone-label" id="detectedTone">Tone: neutral</div>
+                </div>
+                
+                <div class="risk-details">
+                    <div class="memory-status" id="memoryStatus"></div>
+                    <div class="tags-container" id="riskTags"></div>
+                </div>
+            </div>
+
+            <!-- Escalation Banner -->
+            <div id="escalationBanner" class="glass-card escalation-banner hidden">
+                <div class="esc-header">
+                    <span class="esc-icon">⚠️</span>
+                    <h3>Escalation Detected</h3>
+                </div>
+                <p id="escReason" class="esc-reason">High risk of provoking a negative response.</p>
+                <p class="esc-action">Action Recommended: <strong id="escAction">pause_and_wait</strong></p>
+            </div>
+
+            <div class="rewrite-notes" id="rewriteNotes">✨ Adjusted tone for context.</div>
+
+            <!-- Version Cards -->
+            <div class="versions-grid">
+                <!-- Diplomatic -->
+                <div class="glass-card version-card card-diplomatic" data-version="diplomatic">
+                    <div class="card-header">
+                        <div class="card-title">🤝 Diplomatic</div>
+                        <div class="risk-badge" id="riskBadgeDiplomatic">0</div>
+                    </div>
+                    <div class="message-text typewriter" id="textDiplomatic"></div>
+                    <button class="use-btn">Use This Version</button>
+                </div>
+                
+                <!-- Direct -->
+                <div class="glass-card version-card card-direct" data-version="direct">
+                    <div class="card-header">
+                        <div class="card-title">⚡ Direct</div>
+                        <div class="risk-badge" id="riskBadgeDirect">0</div>
+                    </div>
+                    <div class="message-text typewriter" id="textDirect"></div>
+                    <button class="use-btn">Use This Version</button>
+                </div>
+
+                <!-- Warm -->
+                <div class="glass-card version-card card-warm" data-version="warm">
+                    <div class="card-header">
+                        <div class="card-title">❤️ Warm</div>
+                        <div class="risk-badge" id="riskBadgeWarm">0</div>
+                    </div>
+                    <div class="message-text typewriter" id="textWarm"></div>
+                    <button class="use-btn">Use This Version</button>
+                </div>
+            </div>
+
+            <!-- Final Channel Format Output -->
+            <div id="formatPanel" class="glass-card format-panel hidden">
+                <div class="format-header">
+                    <h3 id="formatPlatform">📧 Email Format</h3>
+                    <button id="copyBtn" class="copy-btn">Copy to clipboard</button>
+                </div>
+                <div class="format-body" id="finalMessage"></div>
+            </div>
+
+            <!-- Outcome Logging -->
+            <div id="outcomePanel" class="outcome-panel hidden">
+                <h3>What happened next?</h3>
+                <div class="outcome-buttons">
+                    <button class="outcome-btn btn-success" data-outcome="worked">It worked</button>
+                    <button class="outcome-btn btn-warning" data-outcome="no_reply">No reply yet</button>
+                    <button class="outcome-btn btn-danger" data-outcome="made_it_worse">Made it worse</button>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="glass-card toast hidden">
+        Got it — I'll remember this for next time 🧠
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
