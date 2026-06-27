@@ -5,7 +5,7 @@ import httpx
 USE_GEMINI = False  # Set to True to use Gemini API instead of local Ollama
 GEMINI_API_KEY = "YOUR_API_KEY_HERE"
 OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "gemma2:9b"
+OLLAMA_MODEL = "gemma4:12b"
 
 async def call_llm(prompt: str, json_format: bool = True) -> str:
     """Calls the LLM with the given prompt.

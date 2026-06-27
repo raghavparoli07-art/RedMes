@@ -30,7 +30,7 @@ Built as a capstone project for the **Kaggle AI Agents: Intensive Vibe Coding Ha
 - 🛡️ **Risk Assessment & Escalation Warnings:** Analyzes emotional volatility and warns you with a visual UI pulse if your draft risks escalating a conflict.
 - 💾 **Contextual Memory:** Uses a local SQLite database and an MCP (Model Context Protocol) server to remember past outcomes with specific contacts, helping you avoid repeating communication mistakes.
 - 🎨 **State-of-the-Art Glassmorphism UI:** A stunning, responsive frontend featuring ambient aurora backgrounds, animated SVG risk gauges, and smooth staggered micro-interactions.
-- 🔒 **100% Local & Private:** No API keys. No cloud data harvesting. Everything runs locally on your machine using Ollama and the `gemma2:9b` model.
+- 🔒 **100% Local & Private:** No API keys. No cloud data harvesting. Everything runs locally on your machine using Ollama and the `gemma4:12b` model.
 <img width="982" height="885" alt="Image" src="https://github.com/user-attachments/assets/549d7887-2fc2-4a21-ae79-66d355848f2a" />
 
 ##  ✨Demo Video
@@ -60,7 +60,7 @@ graph TD
 
 ## 🛠️ Tech Stack
 
-- **AI & Agents:** Google ADK (Agent Development Kit), Ollama, `gemma2:9b`
+- **AI & Agents:** Google ADK (Agent Development Kit), Ollama, `gemma4:12b`
 - **Backend:** Python, FastAPI, SQLite
 - **Integration:** MCP (Model Context Protocol) via `fastmcp`
 - **Frontend:** Vanilla JavaScript, HTML5, CSS3 (Custom Glassmorphism Design System)
@@ -81,9 +81,9 @@ graph TD
    ```
 
 2. **Pull the required local LLM:**
-   Ensure Ollama is running, then download the Gemma 2 9B model:
+   Ensure Ollama is running, then download the Gemma 4 12B model:
    ```bash
-   ollama pull gemma2:9b
+   ollama pull gemma4:12b
    ```
    *(Note: This model is highly recommended for reasoning and instruction following, but you can configure a different local model in `llm/llm_client.py` if needed.)*
 
