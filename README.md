@@ -1,59 +1,126 @@
-# Redmes
+# 💌 RedMes: AI Agentic Message Rewriter
 
-Redmes ("ready message") is an AI agent system that acts as an emotional buffer for your communications. It reads your raw, emotionally charged, or unclear drafts and rewrites them into polished, well-toned versions that still sound like you. By keeping track of your history with each contact, it learns your communication patterns and warns you if you're repeating past mistakes, all while keeping your data strictly local.
+<div align="center">
+  <p><strong>Your intelligent, privacy-first emotional buffer for communication.</strong></p>
+  <p>
+    <a href="#about-the-project">About</a> •
+    <a href="#key-features">Features</a> •
+    <a href="#architecture">Architecture</a> •
+    <a href="#getting-started">Installation</a> •
+    <a href="#usage">Usage</a>
+  </p>
+</div>
 
-## Architecture
+---
 
-```text
-User Input (Text, Recipient, Platform)
-        │
-        ▼
-   [ FastAPI Backend ]
-        │
-        ▼ (Google ADK Orchestrator)
-  ┌────────────────────────────────────────────────────────────┐
-  │ 1. Context Risk Agent: Assesses tone and escalation risk   │
-  │                           │                                │
-  │ 2. Memory Outcome Agent: Fetches past outcomes via MCP     │
-  │                           │                                │
-  │ 3. Voice Rewriter Agent: Drafts 3 tone versions anchored   │
-  │    to your personal voice samples                          │
-  └───────────────────────────┬────────────────────────────────┘
-        │                     │
-        ▼                     ▼
-[ MCP Server (fastmcp) ] <--> [ SQLite Local DB ]
-        │
-        ▼
-User selects version
-        │
-        ▼
-  4. Channel Formatter Agent: Formats for Email, Slack, or Text
+## 📖 About The Project
+
+**RedMes** ("Ready Message") is a fully local, multi-agent AI system that acts as a protective buffer between your raw emotions and your outgoing communications. 
+
+Whether you're drafting a frustrated email to a boss, a rushed Hinglish text to a friend, or an anxious Slack message to a colleague, RedMes intelligently analyzes the context, assesses escalation risk, and rewrites your message into polished, context-aware alternatives—all while preserving your unique voice.
+
+Built as a capstone project for the **Kaggle AI Agents: Intensive Vibe Coding Hackathon**.
+
+## ✨ Key Features
+
+- 🧠 **Multi-Agent Orchestration:** Powered by Google ADK, chaining specialized agents for context detection, memory retrieval, voice rewriting, and channel formatting.
+- 🗣️ **Intelligent Tone & Language Adaptation:** Automatically detects if you're writing in English, Hindi, Hinglish, or a mix, and dynamically adapts the output language based on the recipient (e.g., formal English for a senior, casual Hinglish for a friend).
+- 🛡️ **Risk Assessment & Escalation Warnings:** Analyzes emotional volatility and warns you with a visual UI pulse if your draft risks escalating a conflict.
+- 💾 **Contextual Memory:** Uses a local SQLite database and an MCP (Model Context Protocol) server to remember past outcomes with specific contacts, helping you avoid repeating communication mistakes.
+- 🎨 **State-of-the-Art Glassmorphism UI:** A stunning, responsive frontend featuring ambient aurora backgrounds, animated SVG risk gauges, and smooth staggered micro-interactions.
+- 🔒 **100% Local & Private:** No API keys. No cloud data harvesting. Everything runs locally on your machine using Ollama and the `gemma2:9b` model.
+
+## 🏗️ Architecture
+
+```mermaid
+graph TD
+    User([User Input: Text, Recipient, Platform]) --> Backend[FastAPI Backend]
+    
+    subgraph Agentic Orchestrator
+        Backend --> Agent1[1. Context & Risk Agent<br>Analyzes tone, language, risk]
+        Agent1 --> Agent2[2. Memory & Outcome Agent<br>Checks past interactions via MCP]
+        Agent2 --> Agent3[3. Voice Rewriter Agent<br>Drafts 3 tone-adjusted versions]
+    end
+    
+    subgraph Local Data Layer
+        Agent2 <--> MCP[MCP Server<br>fastmcp]
+        MCP <--> DB[(SQLite Database)]
+    end
+    
+    Agent3 --> UI[User Selects Preferred Version]
+    UI --> Agent4[4. Channel Formatter Agent<br>Applies Email/Slack formatting]
+    Agent4 --> Output([Ready-to-Send Message])
 ```
 
-## Setup Instructions
+## 🛠️ Tech Stack
 
-1. Install Ollama and pull the Gemma 2 9B model:
+- **AI & Agents:** Google ADK (Agent Development Kit), Ollama, `gemma2:9b`
+- **Backend:** Python, FastAPI, SQLite
+- **Integration:** MCP (Model Context Protocol) via `fastmcp`
+- **Frontend:** Vanilla JavaScript, HTML5, CSS3 (Custom Glassmorphism Design System)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+1. **Python 3.10+** installed on your system.
+2. **Ollama** installed and running locally. [Download Ollama](https://ollama.com/)
+
+### Installation
+
+1. **Clone the repository:**
    ```bash
-   ollama run gemma2:9b
+   git clone https://github.com/raghavparoli07-art/RedMes.git
+   cd RedMes
    ```
-2. Install Python dependencies:
+
+2. **Pull the required local LLM:**
+   Ensure Ollama is running, then download the Gemma 2 9B model:
+   ```bash
+   ollama pull gemma2:9b
+   ```
+   *(Note: This model is highly recommended for reasoning and instruction following, but you can configure a different local model in `llm/llm_client.py` if needed.)*
+
+3. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
-3. Run the application:
+
+4. **Run the application:**
+   Starting the FastAPI server automatically spins up the MCP server and initializes the SQLite database:
    ```bash
    python main.py
    ```
-4. Open your browser to `http://localhost:8000`.
 
-## Hackathon Concept Map
+5. **Open the App:**
+   Navigate to [http://localhost:8000](http://localhost:8000) in your web browser.
 
-This project demonstrates the required hackathon concepts in the following ways:
-- **Multi-agent system (Google ADK)**: The `orchestrator.py` script chains the four specialized agents in `agents/`.
-- **MCP Server**: The `mcp_server/redmes_server.py` implements a `fastmcp` server, launched as a background subprocess, handling DB queries, sanitization, and sample fetching.
-- **Security features**: Implemented across the stack. Input is sanitized via the MCP tool `sanitize_input()` before processing. The database uses strictly parameterized queries. `CONTEXT.md` outlines further guardrails.
-- **Deployability**: Runs entirely offline with a single startup command (`python main.py`). No cloud API keys required.
+## 🧪 Usage & Testing Scenarios
 
-## Privacy Guarantee
+To fully experience the system's dynamic capabilities, try these specific prompts in the web interface:
 
-Your communications are private. No data leaves your local machine. All LLM processing happens locally via Ollama, and conversation history is stored in a local SQLite file. No external API keys are required or used.
+**Scenario 1: Cross-Language Formality**
+- **Draft:** "kal meeting me baat karte hai, ye code bilkul theek nahi hai yaar."
+- **Recipient:** Boss
+- **Platform:** Email
+- *Observe how the agent translates the frustrated Hinglish into a polite, professional English email.*
+
+**Scenario 2: Casual De-escalation**
+- **Draft:** "WHY did you do that without asking me?? you always do this."
+- **Recipient:** Friend
+- **Platform:** Text
+- *Observe the Risk Gauge turn red, the escalation warning banner pulse, and the agent providing softer, constructive alternatives while keeping a casual tone.*
+
+## 🏆 Kaggle Capstone Requirements Mapped
+
+- **Multi-Agent System (Google ADK):** Implemented via `orchestrator.py` linking four distinct agents.
+- **MCP Server:** `mcp_server/redmes_server.py` securely handles database interaction and memory retrieval.
+- **Security Features:** Database inputs are sanitized, strictly parameterized SQLite queries are used, and `CONTEXT.md` enforces AI behavioral guardrails.
+- **Deployability:** Fully self-contained local stack. Zero external API dependencies.
+
+## 🔐 Privacy Guarantee
+
+Your communications are highly sensitive. RedMes is built on a strict privacy-first architecture. **No data ever leaves your local machine.** All AI inference happens locally via Ollama, and your conversation history is stored securely in a local `.sqlite` file.
+
+---
+*Built with ❤️ for the AI Agents Intensive Vibe Coding Capstone.*
