@@ -36,6 +36,14 @@ async def run_voice_rewriter(raw_message: str, detected_tone: str, risk_reasons:
 
     Risk Reasons to avoid: {json.dumps(risk_reasons)}
 
+    Language rules:
+    - Every rewrite MUST be written in the Target Output Language.
+    - If Target Output Language is english, write only in English. Do not answer in Hindi or Hinglish.
+    - If Target Output Language is hindi, write in natural Hindi.
+    - If Target Output Language is hinglish, write in natural Hinglish.
+    - If Target Output Language is any other language, translate the meaning into that language.
+    - Preserve names, company names, links, numbers, and technical terms when translation would be unnatural.
+
     Output a JSON object exactly matching this structure (and NO other text):
     {{
       "versions": {{

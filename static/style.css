@@ -158,7 +158,11 @@ body::before {
 }
 
 /* Inputs */
-.input-panel { padding: 32px; }
+.input-panel {
+    padding: 32px;
+    overflow: visible;
+    z-index: 10;
+}
 .input-group { margin-bottom: 24px; }
 .input-group label {
     display: block;
@@ -238,7 +242,25 @@ textarea { min-height: 120px; resize: vertical; }
     visibility: hidden;
     transform: translateY(-15px) scale(0.98);
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    overflow: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    max-height: min(260px, 48vh);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.22) transparent;
+}
+/* Scrollbar styling for custom options */
+.custom-options::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-options::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-options::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+}
+.custom-options::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.2);
 }
 .custom-select.open .custom-options {
     opacity: 1;

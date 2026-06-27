@@ -1,53 +1,71 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Elements
-    const rawMessage = document.getElementById('rawMessage');
-    const charCount = document.getElementById('charCount');
-    const analyzeBtn = document.getElementById('analyzeBtn');
-    const loadingPipeline = document.getElementById('loadingPipeline');
-    const statusText = document.getElementById('statusText');
-    const resultsPanel = document.getElementById('resultsPanel');
-    const errorBanner = document.getElementById('errorBanner');
-    const retryBtn = document.getElementById('retryBtn');
-    const escalationBanner = document.getElementById('escalationBanner');
-    
-    // Capability Pills Animation
-    setTimeout(() => {
-        const pills = document.querySelectorAll('.pill');
-        pills.forEach((pill, index) => {
-            setTimeout(() => {
-                pill.style.transition = 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                pill.style.opacity = '1';
-                pill.style.transform = 'scale(1)';
-            }, index * 200);
+    try {
+        // Elements
+        const rawMessage = document.getElementById('rawMessage');
+        const charCount = document.getElementById('charCount');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const loadingPipeline = document.getElementById('loadingPipeline');
+        const statusText = document.getElementById('statusText');
+        const resultsPanel = document.getElementById('resultsPanel');
+        const errorBanner = document.getElementById('errorBanner');
+        const retryBtn = document.getElementById('retryBtn');
+        const escalationBanner = document.getElementById('escalationBanner');
+        
+        if (!analyzeBtn) {
+            alert('CRITICAL ERROR: analyzeBtn not found in DOM.');
+            return;
+        }
+
+        // Capability Pills Animation
+        setTimeout(() => {
+            const pills = document.querySelectorAll('.pill');
+            pills.forEach((pill, index) => {
+                setTimeout(() => {
+                    pill.style.transition = 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    pill.style.opacity = '1';
+                    pill.style.transform = 'scale(1)';
+                }, index * 200);
+            });
+        }, 500);
+
+        // Custom Dropdown Logic
+        const customSelects = document.querySelectorAll('.custom-select');
+
+    customSelects.forEach(customSelect => {
+        const trigger = customSelect.querySelector('.select-trigger');
+        const options = customSelect.querySelectorAll('.custom-option');
+        const hiddenInput = customSelect.nextElementSibling;
+        const selectedText = customSelect.querySelector('.selected-text');
+        const optionsPanel = customSelect.querySelector('.custom-options');
+
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // Close others
+            customSelects.forEach(select => {
+                if (select !== customSelect) select.classList.remove('open');
+            });
+            customSelect.classList.toggle('open');
         });
-    }, 500);
 
-    // Custom Dropdown Logic
-    const customSelect = document.getElementById('customPlatformSelect');
-    const trigger = customSelect.querySelector('.select-trigger');
-    const options = customSelect.querySelectorAll('.custom-option');
-    const hiddenInput = document.getElementById('platformSelect');
-    const selectedText = customSelect.querySelector('.selected-text');
-
-    trigger.addEventListener('click', () => {
-        customSelect.classList.toggle('open');
-    });
-
-    options.forEach(option => {
-        option.addEventListener('click', () => {
-            options.forEach(opt => opt.classList.remove('selected'));
-            option.classList.add('selected');
-            selectedText.textContent = option.textContent;
-            hiddenInput.value = option.dataset.value;
-            customSelect.classList.remove('open');
+        options.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                options.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedText.textContent = option.textContent;
+                hiddenInput.value = option.dataset.value;
+                customSelect.classList.remove('open');
+            });
         });
+
+        optionsPanel.addEventListener('wheel', (e) => {
+            e.stopPropagation();
+        }, { passive: true });
     });
 
     // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!customSelect.contains(e.target)) {
-            customSelect.classList.remove('open');
-        }
+    document.addEventListener('click', () => {
+        customSelects.forEach(select => select.classList.remove('open'));
     });
 
     // Textarea Auto-expand & Char Count
@@ -73,7 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
     analyzeBtn.addEventListener('click', async () => {
         const text = rawMessage.value.trim();
         const recipient = document.getElementById('recipientName').value.trim();
-        const platform = document.getElementById('platformSelect').value;
+        const platform = document.getElementById('platformSelect') ? document.getElementById('platformSelect').value : 'email';
+        const langSelect = document.getElementById('languageSelect');
+        const targetLanguage = langSelect ? langSelect.value : 'Auto';
 
         if (!text || !recipient) {
             alert('Please provide both a message and a recipient name.');
@@ -119,7 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({
                     raw_text: text,
                     recipient_name: recipient,
-                    platform: platform
+                    platform: platform,
+                    target_language: targetLanguage
                 })
             });
 
@@ -330,6 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const chosenText = currentAnalysisResult.rewrites.versions[version];
             const platform = document.getElementById('platformSelect').value;
             const relType = currentAnalysisResult.risk_analysis.relationship_type;
+            const outputLanguage = currentAnalysisResult.risk_analysis.output_language || currentAnalysisResult.rewrites.output_language || 'english';
 
             document.getElementById('formatPanel').classList.add('hidden');
             
@@ -340,7 +362,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({
                         chosen_message: chosenText,
                         platform: platform,
-                        relationship_type: relType
+                        relationship_type: relType,
+                        output_language: outputLanguage
                     })
                 });
                 
@@ -421,5 +444,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("Failed to log outcome:", err);
             }
         });
-    });
+        });
+    } catch (e) {
+        alert("CRITICAL ERROR ON LOAD: " + e.message);
+        console.error(e);
+    }
 });

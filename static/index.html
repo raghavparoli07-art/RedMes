@@ -33,7 +33,7 @@
         <section class="glass-card input-panel" id="inputPanel">
             <div class="input-group">
                 <label>Platform</label>
-                <div class="custom-select" id="customPlatformSelect">
+                <div class="custom-select">
                     <div class="select-trigger">
                         <span class="selected-text">Email</span>
                         <span class="chevron">▼</span>
@@ -45,6 +45,41 @@
                     </div>
                 </div>
                 <input type="hidden" id="platformSelect" value="email">
+            </div>
+
+            <div class="input-group">
+                <label>Output Language</label>
+                <div class="custom-select">
+                    <div class="select-trigger">
+                        <span class="selected-text">Auto (Same as input)</span>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-option selected" data-value="Auto">Auto (Same as input)</div>
+                        <div class="custom-option" data-value="English">English</div>
+                        <div class="custom-option" data-value="Hindi">Hindi</div>
+                        <div class="custom-option" data-value="Hinglish">Hinglish</div>
+                        <div class="custom-option" data-value="Marathi">Marathi</div>
+                        <div class="custom-option" data-value="Bengali">Bengali</div>
+                        <div class="custom-option" data-value="Tamil">Tamil</div>
+                        <div class="custom-option" data-value="Telugu">Telugu</div>
+                        <div class="custom-option" data-value="Kannada">Kannada</div>
+                        <div class="custom-option" data-value="Malayalam">Malayalam</div>
+                        <div class="custom-option" data-value="Gujarati">Gujarati</div>
+                        <div class="custom-option" data-value="Punjabi">Punjabi</div>
+                        <div class="custom-option" data-value="Urdu">Urdu</div>
+                        <div class="custom-option" data-value="French">French</div>
+                        <div class="custom-option" data-value="German">German</div>
+                        <div class="custom-option" data-value="Spanish">Spanish</div>
+                        <div class="custom-option" data-value="Italian">Italian</div>
+                        <div class="custom-option" data-value="Portuguese">Portuguese</div>
+                        <div class="custom-option" data-value="Arabic">Arabic</div>
+                        <div class="custom-option" data-value="Japanese">Japanese</div>
+                        <div class="custom-option" data-value="Korean">Korean</div>
+                        <div class="custom-option" data-value="Chinese">Chinese</div>
+                    </div>
+                </div>
+                <input type="hidden" id="languageSelect" value="Auto">
             </div>
             
             <div class="input-group">

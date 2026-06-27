@@ -34,11 +34,13 @@ class AnalyzeRequest(BaseModel):
     raw_text: str
     recipient_name: str
     platform: str
+    target_language: str = "Auto"
 
 class FormatRequest(BaseModel):
     chosen_message: str
     platform: str
     relationship_type: str
+    output_language: str = "Auto"
 
 class OutcomeRequest(BaseModel):
     recipient_name: str
@@ -106,7 +108,7 @@ async def api_analyze(request: AnalyzeRequest, req: Request):
         raise HTTPException(status_code=400, detail="Message cannot be empty after sanitization.")
         
     try:
-        result = await analyze_message(sanitized_text, sanitized_name, request.platform)
+        result = await analyze_message(sanitized_text, sanitized_name, request.platform, request.target_language)
         # Pass the sanitized text back so the UI has it
         result["sanitized_text"] = sanitized_text
         return result
@@ -121,7 +123,7 @@ async def api_format(request: FormatRequest):
     sanitized_msg = mcp._tool_manager.get_tool("sanitize_input").fn(request.chosen_message)
     
     try:
-        result = await format_for_channel(sanitized_msg, request.platform, request.relationship_type)
+        result = await format_for_channel(sanitized_msg, request.platform, request.relationship_type, request.output_language)
         return result
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
