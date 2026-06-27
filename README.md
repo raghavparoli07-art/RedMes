@@ -16,6 +16,7 @@
 ## 📖 About The Project
 
 **RedMes** ("Ready Message") is a fully local, multi-agent AI system that acts as a protective buffer between your raw emotions and your outgoing communications. 
+<img width="1870" height="886" alt="Image" src="https://github.com/user-attachments/assets/5cfd2dc6-10dc-4aad-ad89-a98ad9e01c05" />
 
 Whether you're drafting a frustrated email to a boss, a rushed Hinglish text to a friend, or an anxious Slack message to a colleague, RedMes intelligently analyzes the context, assesses escalation risk, and rewrites your message into polished, context-aware alternatives—all while preserving your unique voice.
 
@@ -29,6 +30,8 @@ Built as a capstone project for the **Kaggle AI Agents: Intensive Vibe Coding Ha
 - 💾 **Contextual Memory:** Uses a local SQLite database and an MCP (Model Context Protocol) server to remember past outcomes with specific contacts, helping you avoid repeating communication mistakes.
 - 🎨 **State-of-the-Art Glassmorphism UI:** A stunning, responsive frontend featuring ambient aurora backgrounds, animated SVG risk gauges, and smooth staggered micro-interactions.
 - 🔒 **100% Local & Private:** No API keys. No cloud data harvesting. Everything runs locally on your machine using Ollama and the `gemma2:9b` model.
+<img width="1888" height="897" alt="Image" src="https://github.com/user-attachments/assets/5e3feb4e-afb2-474a-bea6-c88c7d0b7fb2" />
+<img width="998" height="907" alt="Image" src="https://github.com/user-attachments/assets/6088b185-f99e-4caa-99d7-42f2c6db9fbf" />
 
 ## 🏗️ Architecture
 
