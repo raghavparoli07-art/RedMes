@@ -33,6 +33,9 @@ Built as a capstone project for the **Kaggle AI Agents: Intensive Vibe Coding Ha
 - 🔒 **100% Local & Private:** No API keys. No cloud data harvesting. Everything runs locally on your machine using Ollama and the `gemma2:9b` model.
 <img width="982" height="885" alt="Image" src="https://github.com/user-attachments/assets/549d7887-2fc2-4a21-ae79-66d355848f2a" />
 
+##  ✨Demo Video
+https://github.com/user-attachments/assets/06203321-d14d-4e56-a10f-0123f93c659f
+
 ## 🏗️ Architecture
 
 ```mermaid
